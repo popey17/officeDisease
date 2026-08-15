@@ -4,14 +4,23 @@ import { CameraControls, ContactShadows } from '@react-three/drei'
 import { Anatomy } from './Anatomy'
 import {
   OVERVIEW_CAMERA,
+  TAKEAWAY_CAMERA,
   diseaseById,
   type DiseaseId,
 } from '../data/diseases'
 
-function Rig({ selectedId }: { selectedId: DiseaseId | null }) {
+function Rig({
+  selectedId,
+  takeaway,
+}: {
+  selectedId: DiseaseId | null
+  takeaway: boolean
+}) {
   const controls = useRef<CameraControls>(null)
   const disease = diseaseById(selectedId)
-  const cam = disease?.camera ?? OVERVIEW_CAMERA
+  const cam = takeaway
+    ? TAKEAWAY_CAMERA
+    : (disease?.camera ?? OVERVIEW_CAMERA)
 
   useEffect(() => {
     const c = controls.current
@@ -65,10 +74,12 @@ function Platform() {
 export function Scene({
   selectedId,
   exploring,
+  takeaway,
   onSelect,
 }: {
   selectedId: DiseaseId | null
   exploring: boolean
+  takeaway: boolean
   onSelect: (id: DiseaseId) => void
 }) {
   return (
@@ -110,7 +121,7 @@ export function Scene({
         blur={2.4}
         far={2.2}
       />
-      <Rig selectedId={selectedId} />
+      <Rig selectedId={selectedId} takeaway={takeaway} />
     </Canvas>
   )
 }

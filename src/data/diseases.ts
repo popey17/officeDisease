@@ -350,20 +350,64 @@ export const DISEASES: Disease[] = [
   },
 ]
 
+export type View = 'overview' | 'takeaway' | DiseaseId
+
+export const TAKEAWAY_CAMERA = {
+  position: [0.25, 1.22, 3.85] as Vec3,
+  target: [0, 1.02, 0] as Vec3,
+}
+
+export const TAKEAWAY = {
+  number: '09',
+  title: 'Discharge notes',
+  lede: 'What to take away — besides a sudden urge to stand up.',
+  points: [
+    {
+      mark: 'Move',
+      text: 'The office is excellent at keeping you still. Your spine, neck, eyes, and wrists are not.',
+    },
+    {
+      mark: 'Names',
+      text: 'Chair Disease and Turtle Neck are for this session. If it actually hurts, use the boring medical name.',
+    },
+    {
+      mark: 'Habits',
+      text: 'Stand, blink, unhunch, sleep. Coffee is a beverage, not a personality — or a treatment plan.',
+    },
+    {
+      mark: 'Trust',
+      text: "Don't trust me. I have a projector and a 3D mannequin. That is not a medical license.",
+    },
+    {
+      mark: 'Doctor',
+      text: 'If symptoms appear, persist, or worry you — consult a doctor. Not this slide. Not Slack. A doctor.',
+    },
+  ],
+  diagnosis:
+    'This presentation is entertainment with a spine. I am not a doctor. This mannequin is not a doctor. Your chair is definitely not a doctor.',
+}
+
 export function diseaseById(id: DiseaseId | null): Disease | undefined {
   if (!id) return undefined
   return DISEASES.find((d) => d.id === id)
 }
 
-export function nextDisease(id: DiseaseId | null): DiseaseId {
-  if (!id) return DISEASES[0].id
-  const i = DISEASES.findIndex((d) => d.id === id)
-  return DISEASES[(i + 1) % DISEASES.length].id
+export function isDiseaseView(view: View): view is DiseaseId {
+  return view !== 'overview' && view !== 'takeaway'
 }
 
-export function prevDisease(id: DiseaseId | null): DiseaseId | null {
-  if (!id) return DISEASES[DISEASES.length - 1].id
-  const i = DISEASES.findIndex((d) => d.id === id)
-  if (i <= 0) return null
+export function nextView(view: View): View {
+  if (view === 'overview') return DISEASES[0].id
+  if (view === 'takeaway') return 'takeaway'
+  const i = DISEASES.findIndex((d) => d.id === view)
+  if (i === DISEASES.length - 1) return 'takeaway'
+  return DISEASES[i + 1].id
+}
+
+export function prevView(view: View): View {
+  if (view === 'overview') return 'overview'
+  if (view === 'takeaway') return DISEASES[DISEASES.length - 1].id
+  const i = DISEASES.findIndex((d) => d.id === view)
+  if (i <= 0) return 'overview'
   return DISEASES[i - 1].id
 }

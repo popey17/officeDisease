@@ -2,18 +2,20 @@ import { useEffect, useState } from 'react'
 import { Scene } from './components/Scene'
 import { DiseaseCard } from './components/DiseaseCard'
 import { DiseaseRail } from './components/DiseaseRail'
+import { TakeawayCard } from './components/TakeawayCard'
 import {
   DISEASES,
   diseaseById,
-  nextDisease,
-  prevDisease,
-  type DiseaseId,
+  isDiseaseView,
+  nextView,
+  prevView,
+  type View,
 } from './data/diseases'
 
 export default function App() {
   const [started, setStarted] = useState(false)
-  const [selectedId, setSelectedId] = useState<DiseaseId | null>(null)
-  const disease = diseaseById(selectedId)
+  const [view, setView] = useState<View>('overview')
+  const disease = isDiseaseView(view) ? diseaseById(view) : undefined
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -29,63 +31,72 @@ export default function App() {
       }
 
       if (event.key === 'Escape' || event.key === '0') {
-        setSelectedId(null)
+        setView('overview')
+        return
+      }
+
+      if (event.key === '9') {
+        setView('takeaway')
         return
       }
 
       if (event.key >= '1' && event.key <= '8') {
         const index = Number(event.key) - 1
-        setSelectedId(DISEASES[index].id)
+        setView(DISEASES[index].id)
         return
       }
 
       if (event.key === 'ArrowRight' || event.key === ' ') {
         event.preventDefault()
-        setSelectedId(nextDisease(selectedId))
+        setView((current) => nextView(current))
         return
       }
 
       if (event.key === 'ArrowLeft') {
         event.preventDefault()
-        setSelectedId(prevDisease(selectedId))
+        setView((current) => prevView(current))
       }
     }
 
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [selectedId, started])
+  }, [started])
 
   return (
-    <div className={`app ${started ? 'is-live' : 'is-intro'}`}>
+    <div
+      className={`app ${started ? 'is-live' : 'is-intro'} ${view === 'takeaway' ? 'is-takeaway' : ''}`}
+    >
       <div className="stage">
         <Scene
-          selectedId={started ? selectedId : null}
-          exploring={started}
-          onSelect={setSelectedId}
+          selectedId={isDiseaseView(view) ? view : null}
+          exploring={started && view !== 'takeaway'}
+          takeaway={false}
+          onSelect={(id) => setView(id)}
         />
       </div>
 
-      <header className="mast">
-        <p className="mast-kicker">Sharing session</p>
-        <h1 className="mast-title">The Anatomy of Office Life</h1>
-        {started && (
-          <p className="mast-count">
-            {selectedId
-              ? `${disease?.number} / 08`
-              : 'Select a site'}
-          </p>
-        )}
-      </header>
+      {view !== 'takeaway' && (
+        <header className="mast">
+          <p className="mast-kicker">Sharing session</p>
+          <h1 className="mast-title">The Anatomy of Office Life</h1>
+          {started && (
+            <p className="mast-count">
+              {disease ? `${disease.number} / 08` : 'Select a site'}
+            </p>
+          )}
+        </header>
+      )}
 
       {!started && (
         <div className="intro">
           <p className="intro-kicker">Occupational anatomy</p>
           <h2 className="intro-title">
-            Eight conditions the workplace writes into the body
+            Eight conditions your desk has been quietly collecting
           </h2>
           <p className="intro-lede">
-            Start with the full figure. Click a site — or use keys 1 to 8 —
-            and the camera moves to the anatomy that takes the hit.
+            A guided tour of the modern workplace, mapped onto a body that
+            never asked to sit from 9 to 6. Click a site — or use keys 1 to 8.
+            Please remain seated. That is, unfortunately, part of the problem.
           </p>
           <button
             className="intro-go"
@@ -94,32 +105,38 @@ export default function App() {
           >
             Begin examination
           </button>
-          <p className="intro-hint">Enter or Space</p>
+          <p className="intro-hint">Enter or Space · I am not a doctor</p>
         </div>
       )}
 
       {started && disease && (
-        <DiseaseCard disease={disease} onClose={() => setSelectedId(null)} />
+        <DiseaseCard disease={disease} onClose={() => setView('overview')} />
       )}
 
-      {started && !disease && (
+      {started && view === 'takeaway' && (
+        <TakeawayCard onClose={() => setView('overview')} />
+      )}
+
+      {started && view === 'overview' && (
         <p className="stage-hint">
           Click a marker on the figure, or choose a condition below.
+          When you are done, there are takeaways. And a disclaimer.
         </p>
       )}
 
-      {started && (
+      {started && view !== 'takeaway' && (
         <DiseaseRail
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-          onOverview={() => setSelectedId(null)}
+          view={view}
+          onSelect={(id) => setView(id)}
+          onOverview={() => setView('overview')}
+          onTakeaway={() => setView('takeaway')}
         />
       )}
 
-      {started && (
+      {started && view !== 'takeaway' && (
         <p className="keys">
-          <kbd>1</kbd>–<kbd>8</kbd> jump · <kbd>←</kbd> <kbd>→</kbd> present ·{' '}
-          <kbd>Esc</kbd> full body
+          <kbd>1</kbd>–<kbd>8</kbd> diseases · <kbd>9</kbd> takeaways ·{' '}
+          <kbd>←</kbd> <kbd>→</kbd> present · <kbd>Esc</kbd> full body
         </p>
       )}
     </div>

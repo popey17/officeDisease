@@ -1,19 +1,21 @@
-import { DISEASES, type DiseaseId } from '../data/diseases'
+import { DISEASES, type View } from '../data/diseases'
 
 export function DiseaseRail({
-  selectedId,
+  view,
   onSelect,
   onOverview,
+  onTakeaway,
 }: {
-  selectedId: DiseaseId | null
-  onSelect: (id: DiseaseId) => void
+  view: View
+  onSelect: (id: View) => void
   onOverview: () => void
+  onTakeaway: () => void
 }) {
   return (
     <nav className="rail" aria-label="Office diseases">
       <button
         type="button"
-        className={`rail-item ${selectedId === null ? 'is-active' : ''}`}
+        className={`rail-item ${view === 'overview' ? 'is-active' : ''}`}
         onClick={onOverview}
       >
         <span className="rail-num">00</span>
@@ -23,7 +25,7 @@ export function DiseaseRail({
         <button
           key={d.id}
           type="button"
-          className={`rail-item ${selectedId === d.id ? 'is-active' : ''}`}
+          className={`rail-item ${view === d.id ? 'is-active' : ''}`}
           style={{ ['--spot' as string]: d.color }}
           onClick={() => onSelect(d.id)}
         >
@@ -34,6 +36,14 @@ export function DiseaseRail({
           <span className="rail-name">{d.nickname}</span>
         </button>
       ))}
+      <button
+        type="button"
+        className={`rail-item ${view === 'takeaway' ? 'is-active' : ''}`}
+        onClick={onTakeaway}
+      >
+        <span className="rail-num">09</span>
+        <span className="rail-name">Takeaways</span>
+      </button>
     </nav>
   )
 }

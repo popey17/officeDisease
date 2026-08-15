@@ -275,6 +275,135 @@ button {
   color: var(--spot, var(--copper));
 }
 
+.takeaway {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: auto;
+}
+
+.takeaway-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px 48px 0;
+  flex-shrink: 0;
+}
+
+.takeaway-kicker {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--copper);
+  margin: 0;
+}
+
+.takeaway-back {
+  border: 1px solid rgba(28, 25, 21, 0.18);
+  background: transparent;
+  color: var(--ink-soft);
+  padding: 8px 14px;
+  border-radius: 2px;
+  font-size: 13px;
+}
+
+.takeaway-back:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.takeaway-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(920px, calc(100% - 96px));
+  margin: 0 auto;
+  padding: 32px 0 56px;
+}
+
+.takeaway-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(44px, 6vw, 72px);
+  font-weight: 650;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.takeaway-lede {
+  margin: 12px 0 0;
+  font-size: clamp(18px, 2vw, 24px);
+  color: var(--ink-soft);
+  max-width: 32ch;
+}
+
+.takeaway-list {
+  margin: 36px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(28, 25, 21, 0.12);
+}
+
+.takeaway-list li {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 18px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(28, 25, 21, 0.12);
+  font-size: clamp(17px, 1.7vw, 22px);
+  line-height: 1.4;
+}
+
+.takeaway-list li:nth-child(5) {
+  grid-column: auto;
+}
+
+.takeaway-list li span {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--copper);
+  padding-top: 5px;
+}
+
+.takeaway-list li.is-stern {
+  background: rgba(196, 106, 58, 0.1);
+  margin: 0 -16px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.takeaway-diagnosis {
+  margin: 36px 0 0;
+  padding: 22px 0 0;
+  border-top: 1px solid rgba(28, 25, 21, 0.12);
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 500;
+  line-height: 1.3;
+  font-style: italic;
+  max-width: 42ch;
+}
+
+.takeaway-diagnosis span {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--copper);
+}
+
 .rail {
   position: absolute;
   left: 16px;
@@ -375,6 +504,28 @@ kbd {
 
   .chart-row {
     grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .takeaway-bar {
+    padding: 20px 20px 0;
+  }
+
+  .takeaway-inner {
+    width: calc(100% - 40px);
+    padding: 24px 0 40px;
+    justify-content: flex-start;
+  }
+
+  .takeaway-list {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .takeaway-list li,
+  .takeaway-list li:nth-child(5) {
+    grid-template-columns: 1fr;
+    grid-column: auto;
     gap: 4px;
   }
 
