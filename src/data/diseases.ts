@@ -20,6 +20,11 @@ export type HighlightRegion =
   | 'system'
   | 'cns'
 
+export type SlidePhoto = {
+  src: string
+  alt: string
+}
+
 export type Disease = {
   id: DiseaseId
   number: string
@@ -31,18 +36,33 @@ export type Disease = {
   color: string
   anatomy: string
   anatomyDetail: string
+  anatomyPhotos: SlidePhoto[]
   cause: string
   causeDetail: string
+  causePhotos: SlidePhoto[]
   symptoms: string
   symptomList: string[]
+  symptomPhotos: SlidePhoto[]
   prevention: string
   preventionList: string[]
+  preventionPhotos: SlidePhoto[]
   diagnosis: string
   camera: {
     position: Vec3
     target: Vec3
   }
   hotspot: Vec3
+}
+
+function photos(
+  id: DiseaseId,
+  step: 'anatomy' | 'cause' | 'symptoms' | 'prevention',
+  alts: [string, string],
+): SlidePhoto[] {
+  return [
+    { src: `/images/${id}/${step}-1.png`, alt: alts[0] },
+    { src: `/images/${id}/${step}-2.png`, alt: alts[1] },
+  ]
 }
 
 export const OVERVIEW_CAMERA = {
@@ -63,15 +83,27 @@ export const DISEASES: Disease[] = [
     anatomy: 'lumbar spine + discs + facet joints + muscles',
     anatomyDetail:
       'Lumbar spine, intervertebral discs, facet joints, and the surrounding muscles and soft tissues.',
+    anatomyPhotos: photos('chair', 'anatomy', [
+      'Lumbar spine and lower back',
+      'Soft tissues around the lower spine',
+    ]),
     cause: 'prolonged sitting + poor posture + no movement',
     causeDetail:
       'Prolonged sitting, poor posture, insufficient movement, and muscle fatigue.',
+    causePhotos: photos('chair', 'cause', [
+      'Long hours sitting at a desk',
+      'An office chair that holds too much of the day',
+    ]),
     symptoms: 'aching + stiffness after sitting',
     symptomList: [
       'Lower-back aching',
       'Stiffness',
       'Pain after sitting for a long time',
     ],
+    symptomPhotos: photos('chair', 'symptoms', [
+      'Lower-back discomfort after sitting',
+      'Standing up stiff from the chair',
+    ]),
     prevention: 'movement + ergonomics + core strength',
     preventionList: [
       'Get up and move regularly',
@@ -80,6 +112,10 @@ export const DISEASES: Disease[] = [
       'Strengthen core and back muscles',
       'Avoid staying in exactly the same position for hours',
     ],
+    preventionPhotos: photos('chair', 'prevention', [
+      'Standing and stretching during the day',
+      'An ergonomic chair and desk setup',
+    ]),
     diagnosis: "Your chair isn't attacking you. You're just giving it too much responsibility.",
     camera: {
       position: [0.55, 1.08, 1.55],
@@ -99,9 +135,17 @@ export const DISEASES: Disease[] = [
     anatomy: 'cervical spine + neck muscles + trapezius',
     anatomyDetail:
       'Cervical spine, neck muscles, upper trapezius, and shoulders.',
+    anatomyPhotos: photos('turtle', 'anatomy', [
+      'Cervical spine and neck',
+      'Upper trapezius and shoulders',
+    ]),
     cause: 'looking down + forward-head posture',
     causeDetail:
       'Looking down at laptops and phones, forward-head posture, and a prolonged static position.',
+    causePhotos: photos('turtle', 'cause', [
+      'Forward-head posture at a laptop',
+      'Looking down at a phone for too long',
+    ]),
     symptoms: 'stiffness + shoulder tension + headache',
     symptomList: [
       'Neck stiffness',
@@ -109,6 +153,10 @@ export const DISEASES: Disease[] = [
       'Headache',
       'Reduced range of motion',
     ],
+    symptomPhotos: photos('turtle', 'symptoms', [
+      'Neck and shoulder fatigue at the desk',
+      'Stiff upper back after screen time',
+    ]),
     prevention: 'eye-level screen + alignment + breaks',
     preventionList: [
       'Raise the monitor to eye level',
@@ -116,6 +164,10 @@ export const DISEASES: Disease[] = [
       'Take movement breaks',
       'Stretch and strengthen neck and upper-back muscles',
     ],
+    preventionPhotos: photos('turtle', 'prevention', [
+      'Monitor raised to eye level',
+      'A short neck-mobility break',
+    ]),
     diagnosis: "Your monitor is on the desk. Your head doesn't need to join it.",
     camera: {
       position: [0.42, 1.62, 1.22],
@@ -135,9 +187,17 @@ export const DISEASES: Disease[] = [
     anatomy: 'eyes + tear film + extraocular muscles',
     anatomyDetail:
       'Eyes, tear film, extraocular muscles, and the visual system.',
+    anatomyPhotos: photos('excel', 'anatomy', [
+      'Eyes under screen light',
+      'The visual system under load',
+    ]),
     cause: 'screen time + less blinking + glare',
     causeDetail:
       'Prolonged screen use, reduced blinking, glare, and poor viewing distance.',
+    causePhotos: photos('excel', 'cause', [
+      'Long hours on bright monitors',
+      'Screen glare on the desk',
+    ]),
     symptoms: 'dryness + blur + headaches',
     symptomList: [
       'Dry or burning eyes',
@@ -145,6 +205,10 @@ export const DISEASES: Disease[] = [
       'Headaches',
       'Difficulty focusing',
     ],
+    symptomPhotos: photos('excel', 'symptoms', [
+      'Rubbing dry, tired eyes',
+      'Eye strain after spreadsheets',
+    ]),
     prevention: '20-20-20 + blink + distance',
     preventionList: [
       'Follow the 20-20-20 rule',
@@ -153,6 +217,10 @@ export const DISEASES: Disease[] = [
       'Keep the monitor at a comfortable distance',
       'Adjust text size and brightness',
     ],
+    preventionPhotos: photos('excel', 'prevention', [
+      'Looking away from the screen for a break',
+      'Comfortable monitor distance',
+    ]),
     diagnosis: "If you close your eyes and still see Excel, it's time for a break.",
     camera: {
       position: [0.22, 1.74, 0.92],
@@ -172,9 +240,17 @@ export const DISEASES: Disease[] = [
     anatomy: 'wrist + forearm tendons + median nerve',
     anatomyDetail:
       'Wrist, forearm tendons, and the median nerve as it passes through the carpal tunnel.',
+    anatomyPhotos: photos('mouse', 'anatomy', [
+      'Wrist and hand at rest',
+      'Forearm tendons under load',
+    ]),
     cause: 'repetitive clicking + awkward wrist + force',
     causeDetail:
       'Repetitive mouse and keyboard movements, awkward wrist position, and excessive force.',
+    causePhotos: photos('mouse', 'cause', [
+      'Tight grip on the mouse',
+      'Repetitive typing with bent wrists',
+    ]),
     symptoms: 'pain + numbness + tingling + weakness',
     symptomList: [
       'Wrist and hand pain',
@@ -182,6 +258,10 @@ export const DISEASES: Disease[] = [
       'Tingling',
       'Weakness',
     ],
+    symptomPhotos: photos('mouse', 'symptoms', [
+      'Wrist discomfort after clicking',
+      'Shaking out a tired hand',
+    ]),
     prevention: 'neutral wrist + lighter grip + shortcuts',
     preventionList: [
       'Keep the wrist in a neutral position',
@@ -190,6 +270,10 @@ export const DISEASES: Disease[] = [
       'Change position regularly',
       'Take breaks from repetitive movements',
     ],
+    preventionPhotos: photos('mouse', 'prevention', [
+      'Neutral wrist with an ergonomic mouse',
+      'A short hand stretch break',
+    ]),
     diagnosis: 'You spend more time holding your mouse than holding your loved ones.',
     camera: {
       position: [0.95, 0.92, 1.2],
@@ -209,9 +293,17 @@ export const DISEASES: Disease[] = [
     anatomy: 'brain + autonomic / endocrine stress systems',
     anatomyDetail:
       'Brain and the autonomic and endocrine stress systems.',
+    anatomyPhotos: photos('deadline', 'anatomy', [
+      'The brain under workplace load',
+      'Mental load written on the face',
+    ]),
     cause: 'workload + low control + no recovery',
     causeDetail:
       'High workload, lack of control, constant deadlines, and insufficient recovery.',
+    causePhotos: photos('deadline', 'cause', [
+      'Urgent messages stacking up',
+      'A desk overloaded with unfinished work',
+    ]),
     symptoms: 'irritability + poor focus + fatigue',
     symptomList: [
       'Irritability',
@@ -220,6 +312,10 @@ export const DISEASES: Disease[] = [
       'Fatigue',
       'Sleep problems',
     ],
+    symptomPhotos: photos('deadline', 'symptoms', [
+      'Tension headache at the desk',
+      'Sleep disrupted by work stress',
+    ]),
     prevention: 'real breaks + boundaries + sleep',
     preventionList: [
       'Take real breaks',
@@ -229,6 +325,10 @@ export const DISEASES: Disease[] = [
       'Exercise regularly',
       'Talk to someone when stress becomes difficult to manage',
     ],
+    preventionPhotos: photos('deadline', 'prevention', [
+      'A real break outdoors',
+      'Protecting sleep and recovery',
+    ]),
     diagnosis:
       "The human brain was not designed to receive 'URGENT' messages 47 times a day.",
     camera: {
@@ -249,14 +349,26 @@ export const DISEASES: Disease[] = [
     anatomy: 'not one organ — stress systems throughout',
     anatomyDetail:
       'Not a single anatomical disease. It involves psychological and physiological stress systems across the whole body.',
+    anatomyPhotos: photos('burnout', 'anatomy', [
+      'Whole-body exhaustion',
+      'Humans do not come with a battery indicator',
+    ]),
     cause: 'prolonged unmanaged workplace stress',
     causeDetail: 'Prolonged unmanaged workplace stress.',
+    causePhotos: photos('burnout', 'cause', [
+      'Working late alone under monitor light',
+      'Work that never seems to end',
+    ]),
     symptoms: 'exhaustion + cynicism + reduced effectiveness',
     symptomList: [
       'Exhaustion',
       'Cynicism / detachment',
       'Reduced effectiveness',
     ],
+    symptomPhotos: photos('burnout', 'symptoms', [
+      'Running on empty at the desk',
+      'Detachment from the work on screen',
+    ]),
     prevention: 'workload + recovery + support',
     preventionList: [
       'Manage workload',
@@ -266,6 +378,10 @@ export const DISEASES: Disease[] = [
       'Maintain social connections',
       'Seek professional support when needed',
     ],
+    preventionPhotos: photos('burnout', 'prevention', [
+      'Social recovery and connection',
+      'Closing the laptop and setting a boundary',
+    ]),
     diagnosis: "Your laptop has a battery indicator. Unfortunately, humans don't.",
     camera: {
       position: [0.15, 1.15, 3.15],
@@ -285,9 +401,17 @@ export const DISEASES: Disease[] = [
     anatomy: 'nose + throat + airways + lungs',
     anatomyDetail:
       'Respiratory tract — nose, throat, airways, and lungs, depending on the infection.',
+    anatomyPhotos: photos('plague', 'anatomy', [
+      'Chest and breathing',
+      'Fresh air for the respiratory tract',
+    ]),
     cause: 'viruses + close contact + shared surfaces',
     causeDetail:
       'Viruses spread through respiratory particles, close contact, and contaminated hands and surfaces.',
+    causePhotos: photos('plague', 'cause', [
+      'Close quarters in an open office',
+      'Shared desks and surfaces',
+    ]),
     symptoms: 'cough + sore throat + fever + fatigue',
     symptomList: [
       'Cough',
@@ -296,6 +420,10 @@ export const DISEASES: Disease[] = [
       'Fever',
       'Fatigue',
     ],
+    symptomPhotos: photos('plague', 'symptoms', [
+      'Feeling under the weather at work',
+      'Resting when genuinely sick',
+    ]),
     prevention: 'stay home + ventilation + hands',
     preventionList: [
       'Stay home when genuinely sick when possible',
@@ -304,6 +432,10 @@ export const DISEASES: Disease[] = [
       'Cover coughs and sneezes',
       'Consider vaccination where appropriate',
     ],
+    preventionPhotos: photos('plague', 'prevention', [
+      'Hand washing',
+      'Fresh air and better ventilation',
+    ]),
     diagnosis:
       "One person says, 'Don't worry, it's just a little cough.' Three days later, the entire department is coughing.",
     camera: {
@@ -324,8 +456,16 @@ export const DISEASES: Disease[] = [
     anatomy: 'central nervous system + adenosine signaling',
     anatomyDetail:
       'Central nervous system, especially adenosine signaling in the brain.',
+    anatomyPhotos: photos('coffee', 'anatomy', [
+      'The nervous system under caffeine',
+      'Coffee as a daily office companion',
+    ]),
     cause: 'regular high caffeine intake',
     causeDetail: 'Regular high caffeine intake.',
+    causePhotos: photos('coffee', 'cause', [
+      'Cup after cup on the desk',
+      'The office coffee machine habit',
+    ]),
     symptoms: 'headache + fatigue + irritability without it',
     symptomList: [
       'Headache without caffeine',
@@ -333,6 +473,10 @@ export const DISEASES: Disease[] = [
       'Irritability',
       'Difficulty concentrating',
     ],
+    symptomPhotos: photos('coffee', 'symptoms', [
+      'Reaching for coffee to function',
+      'Morning irritability without it',
+    ]),
     prevention: 'moderate intake + sleep, not coffee',
     preventionList: [
       'Keep caffeine intake moderate',
@@ -340,6 +484,10 @@ export const DISEASES: Disease[] = [
       'Avoid excessive caffeine late in the day',
       "Reduce gradually if you're consuming a lot",
     ],
+    preventionPhotos: photos('coffee', 'prevention', [
+      'Moderation with water and alternatives',
+      'Sleep instead of late caffeine',
+    ]),
     diagnosis:
       "Coffee doesn't give you energy. Sometimes it just temporarily negotiates with your tiredness.",
     camera: {
@@ -351,6 +499,31 @@ export const DISEASES: Disease[] = [
 ]
 
 export type View = 'overview' | 'takeaway' | DiseaseId
+
+export type DiseaseStep =
+  | 'intro'
+  | 'anatomy'
+  | 'cause'
+  | 'symptoms'
+  | 'prevention'
+
+export const DISEASE_STEPS: DiseaseStep[] = [
+  'intro',
+  'anatomy',
+  'cause',
+  'symptoms',
+  'prevention',
+]
+
+export const DISEASE_STEP_LABELS: Record<DiseaseStep, string> = {
+  intro: 'Intro',
+  anatomy: 'Anatomy',
+  cause: 'Cause',
+  symptoms: 'Symptoms',
+  prevention: 'Prevention',
+}
+
+export const LAST_DISEASE_STEP = DISEASE_STEPS.length - 1
 
 export const TAKEAWAY_CAMERA = {
   position: [0.25, 1.22, 3.85] as Vec3,

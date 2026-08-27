@@ -5,17 +5,66 @@ import { DiseaseRail } from './components/DiseaseRail'
 import { TakeawayCard } from './components/TakeawayCard'
 import {
   DISEASES,
+  LAST_DISEASE_STEP,
   diseaseById,
   isDiseaseView,
   nextView,
   prevView,
+  type DiseaseId,
   type View,
 } from './data/diseases'
 
 export default function App() {
   const [started, setStarted] = useState(false)
   const [view, setView] = useState<View>('overview')
+  const [step, setStep] = useState(0)
   const disease = isDiseaseView(view) ? diseaseById(view) : undefined
+  const presenting = Boolean(disease)
+
+  const goDisease = (id: DiseaseId, nextStep = 0) => {
+    setView(id)
+    setStep(nextStep)
+  }
+
+  const goOverview = () => {
+    setView('overview')
+    setStep(0)
+  }
+
+  const goTakeaway = () => {
+    setView('takeaway')
+    setStep(0)
+  }
+
+  const goNext = () => {
+    if (isDiseaseView(view)) {
+      if (step < LAST_DISEASE_STEP) {
+        setStep((current) => current + 1)
+        return
+      }
+      const next = nextView(view)
+      if (isDiseaseView(next)) goDisease(next, 0)
+      else goTakeaway()
+      return
+    }
+    if (view === 'overview') goDisease(DISEASES[0].id, 0)
+  }
+
+  const goPrev = () => {
+    if (isDiseaseView(view)) {
+      if (step > 0) {
+        setStep((current) => current - 1)
+        return
+      }
+      const prev = prevView(view)
+      if (isDiseaseView(prev)) goDisease(prev, LAST_DISEASE_STEP)
+      else goOverview()
+      return
+    }
+    if (view === 'takeaway') {
+      goDisease(DISEASES[DISEASES.length - 1].id, LAST_DISEASE_STEP)
+    }
+  }
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -31,47 +80,55 @@ export default function App() {
       }
 
       if (event.key === 'Escape' || event.key === '0') {
-        setView('overview')
+        goOverview()
         return
       }
 
       if (event.key === '9') {
-        setView('takeaway')
+        goTakeaway()
         return
       }
 
       if (event.key >= '1' && event.key <= '8') {
         const index = Number(event.key) - 1
-        setView(DISEASES[index].id)
+        goDisease(DISEASES[index].id, 0)
         return
       }
 
       if (event.key === 'ArrowRight' || event.key === ' ') {
         event.preventDefault()
-        setView((current) => nextView(current))
+        goNext()
         return
       }
 
       if (event.key === 'ArrowLeft') {
         event.preventDefault()
-        setView((current) => prevView(current))
+        goPrev()
       }
     }
 
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [started])
+  })
 
   return (
     <div
-      className={`app ${started ? 'is-live' : 'is-intro'} ${view === 'takeaway' ? 'is-takeaway' : ''}`}
+      className={[
+        'app',
+        started ? 'is-live' : 'is-intro',
+        view === 'takeaway' ? 'is-takeaway' : '',
+        presenting ? 'is-presenting' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
       <div className="stage">
         <Scene
           selectedId={isDiseaseView(view) ? view : null}
           exploring={started && view !== 'takeaway'}
           takeaway={false}
-          onSelect={(id) => setView(id)}
+          presenting={presenting}
+          onSelect={(id) => goDisease(id, 0)}
         />
       </div>
 
@@ -81,7 +138,9 @@ export default function App() {
           <h1 className="mast-title">The Anatomy of Office Life</h1>
           {started && (
             <p className="mast-count">
-              {disease ? `${disease.number} / 08` : 'Select a site'}
+              {disease
+                ? `${disease.number} / 08 · slide ${step + 1}/5`
+                : 'Select a site'}
             </p>
           )}
         </header>
@@ -110,33 +169,39 @@ export default function App() {
       )}
 
       {started && disease && (
-        <DiseaseCard disease={disease} onClose={() => setView('overview')} />
+        <DiseaseCard
+          disease={disease}
+          step={step}
+          onStep={setStep}
+          onClose={goOverview}
+        />
       )}
 
       {started && view === 'takeaway' && (
-        <TakeawayCard onClose={() => setView('overview')} />
+        <TakeawayCard onClose={goOverview} />
       )}
 
       {started && view === 'overview' && (
         <p className="stage-hint">
           Click a marker on the figure, or choose a condition below.
-          When you are done, there are takeaways. And a disclaimer.
+          Each disease has five slides. Arrow keys walk the room through them.
         </p>
       )}
 
       {started && view !== 'takeaway' && (
         <DiseaseRail
           view={view}
-          onSelect={(id) => setView(id)}
-          onOverview={() => setView('overview')}
-          onTakeaway={() => setView('takeaway')}
+          onSelect={(id) => goDisease(id, 0)}
+          onOverview={goOverview}
+          onTakeaway={goTakeaway}
         />
       )}
 
       {started && view !== 'takeaway' && (
         <p className="keys">
-          <kbd>1</kbd>–<kbd>8</kbd> diseases · <kbd>9</kbd> takeaways ·{' '}
-          <kbd>←</kbd> <kbd>→</kbd> present · <kbd>Esc</kbd> full body
+          <kbd>→</kbd> next slide · <kbd>←</kbd> back · <kbd>1</kbd>–
+          <kbd>8</kbd> disease · <kbd>9</kbd> takeaways · <kbd>Esc</kbd> full
+          body
         </p>
       )}
     </div>
