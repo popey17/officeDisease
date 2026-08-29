@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:pages": "VITE_BASE_PATH=/officeDisease/ npm run build",
-    "lint": "oxlint",
+    "lint": "oxlint src",
     "preview": "vite preview",
     "preview:pages": "VITE_BASE_PATH=/officeDisease/ vite preview"
   },

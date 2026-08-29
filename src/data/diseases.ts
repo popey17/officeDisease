@@ -559,6 +559,8 @@ export const TAKEAWAY = {
   ],
   diagnosis:
     'This presentation is entertainment with a spine. I am not a doctor. This mannequin is not a doctor. Your chair is definitely not a doctor.',
+  credit:
+    'Anatomical model from Z-Anatomy (CC BY-SA 4.0), packed for the browser by hpfrei.',
 }
 
 export function diseaseById(id: DiseaseId | null): Disease | undefined {

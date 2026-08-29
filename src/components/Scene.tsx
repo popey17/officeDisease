@@ -106,7 +106,7 @@ function Rig({
       ref={controls}
       smoothTime={0.7}
       minDistance={0.55}
-      maxDistance={7}
+      maxDistance={8}
       minPolarAngle={0.15}
       maxPolarAngle={Math.PI / 2 + 0.12}
     />
@@ -162,8 +162,8 @@ export function Scene({
     >
       <color attach="background" args={['#0c0e12']} />
       <fog attach="fog" args={['#0c0e12', 6, 14]} />
-      <hemisphereLight args={['#f2ebe1', '#1b2228', 0.7]} />
-      <ambientLight intensity={0.45} />
+      <hemisphereLight args={['#f2ebe1', '#1b2228', 1.05]} />
+      <ambientLight intensity={0.7} />
       <spotLight
         position={[3.2, 5.2, 3.4]}
         intensity={90}

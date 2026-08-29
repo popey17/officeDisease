@@ -35,6 +35,7 @@ export function TakeawayCard({ onClose }: { onClose: () => void }) {
           <span>Office diagnosis</span>
           <HtmlText tag="span" html={TAKEAWAY.diagnosis} />
         </blockquote>
+        <p className="takeaway-credit">{TAKEAWAY.credit}</p>
       </div>
     </section>
   )

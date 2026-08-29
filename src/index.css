@@ -745,6 +745,16 @@ img {
   color: var(--copper);
 }
 
+.takeaway-credit {
+  margin: 28px 0 0;
+  max-width: 52ch;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
 .rail {
   position: absolute;
   left: 16px;
