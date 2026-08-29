@@ -59,9 +59,10 @@ function photos(
   step: 'anatomy' | 'cause' | 'symptoms' | 'prevention',
   alts: [string, string],
 ): SlidePhoto[] {
+  const base = import.meta.env.BASE_URL
   return [
-    { src: `/images/${id}/${step}-1.png`, alt: alts[0] },
-    { src: `/images/${id}/${step}-2.png`, alt: alts[1] },
+    { src: `${base}images/${id}/${step}-1.png`, alt: alts[0] },
+    { src: `${base}images/${id}/${step}-2.png`, alt: alts[1] },
   ]
 }
 
@@ -102,11 +103,11 @@ export const DISEASES: Disease[] = [
     ],
     symptomPhotos: photos('chair', 'symptoms', [
       'Lower-back discomfort after sitting',
-      'Standing up stiff from the chair',
+      'Cartoon: fused to the office chair',
     ]),
     prevention: 'movement + ergonomics + core strength',
     preventionList: [
-      'Get up and move regularly',
+      'Get up and move regularly<br>( 10 situp and scretch after 30 min of work )',
       'Adjust chair height and lumbar support',
       'Keep feet supported',
       'Strengthen core and back muscles',
@@ -155,7 +156,7 @@ export const DISEASES: Disease[] = [
     ],
     symptomPhotos: photos('turtle', 'symptoms', [
       'Neck and shoulder fatigue at the desk',
-      'Stiff upper back after screen time',
+      'Cartoon: turtle neck at the laptop',
     ]),
     prevention: 'eye-level screen + alignment + breaks',
     preventionList: [
@@ -207,11 +208,11 @@ export const DISEASES: Disease[] = [
     ],
     symptomPhotos: photos('excel', 'symptoms', [
       'Rubbing dry, tired eyes',
-      'Eye strain after spreadsheets',
+      'Cartoon: spreadsheet eyes from screen time',
     ]),
     prevention: '20-20-20 + blink + distance',
     preventionList: [
-      'Follow the 20-20-20 rule',
+      'Follow the 20-20-20 rule<br><a href="https://www.mykidsvision.org/es-ES/knowledge-centre/all-about-the-20-20-20-rule-for-tackling-eye-strain">More information</a>',
       'Blink regularly',
       'Reduce glare',
       'Keep the monitor at a comfortable distance',
@@ -260,7 +261,7 @@ export const DISEASES: Disease[] = [
     ],
     symptomPhotos: photos('mouse', 'symptoms', [
       'Wrist discomfort after clicking',
-      'Shaking out a tired hand',
+      'Cartoon: hand shaped like a mouse',
     ]),
     prevention: 'neutral wrist + lighter grip + shortcuts',
     preventionList: [
@@ -314,7 +315,7 @@ export const DISEASES: Disease[] = [
     ],
     symptomPhotos: photos('deadline', 'symptoms', [
       'Tension headache at the desk',
-      'Sleep disrupted by work stress',
+      'Cartoon: brain overheating from urgent messages',
     ]),
     prevention: 'real breaks + boundaries + sleep',
     preventionList: [
@@ -367,7 +368,7 @@ export const DISEASES: Disease[] = [
     ],
     symptomPhotos: photos('burnout', 'symptoms', [
       'Running on empty at the desk',
-      'Detachment from the work on screen',
+      'Cartoon: human battery at 1%',
     ]),
     prevention: 'workload + recovery + support',
     preventionList: [
@@ -422,7 +423,7 @@ export const DISEASES: Disease[] = [
     ],
     symptomPhotos: photos('plague', 'symptoms', [
       'Feeling under the weather at work',
-      'Resting when genuinely sick',
+      'Cartoon: office plague spreading',
     ]),
     prevention: 'stay home + ventilation + hands',
     preventionList: [
@@ -475,7 +476,7 @@ export const DISEASES: Disease[] = [
     ],
     symptomPhotos: photos('coffee', 'symptoms', [
       'Reaching for coffee to function',
-      'Morning irritability without it',
+      'Cartoon: turning into a coffee cup without caffeine',
     ]),
     prevention: 'moderate intake + sleep, not coffee',
     preventionList: [
@@ -509,9 +510,9 @@ export type DiseaseStep =
 
 export const DISEASE_STEPS: DiseaseStep[] = [
   'intro',
+  'symptoms',
   'anatomy',
   'cause',
-  'symptoms',
   'prevention',
 ]
 

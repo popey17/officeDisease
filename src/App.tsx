@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { Scene } from './components/Scene'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { DiseaseCard } from './components/DiseaseCard'
 import { DiseaseRail } from './components/DiseaseRail'
 import { TakeawayCard } from './components/TakeawayCard'
@@ -13,6 +12,10 @@ import {
   type DiseaseId,
   type View,
 } from './data/diseases'
+
+const Scene = lazy(() =>
+  import('./components/Scene').then(({ Scene }) => ({ default: Scene })),
+)
 
 export default function App() {
   const [started, setStarted] = useState(false)
@@ -123,13 +126,15 @@ export default function App() {
         .join(' ')}
     >
       <div className="stage">
-        <Scene
-          selectedId={isDiseaseView(view) ? view : null}
-          exploring={started && view !== 'takeaway'}
-          takeaway={false}
-          presenting={presenting}
-          onSelect={(id) => goDisease(id, 0)}
-        />
+        <Suspense fallback={<div className="stage-loading" aria-hidden="true" />}>
+          <Scene
+            selectedId={isDiseaseView(view) ? view : null}
+            exploring={started && view !== 'takeaway'}
+            takeaway={false}
+            presenting={presenting}
+            onSelect={(id) => goDisease(id, 0)}
+          />
+        </Suspense>
       </div>
 
       {view !== 'takeaway' && (

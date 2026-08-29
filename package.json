@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:pages": "VITE_BASE_PATH=/officeDisease/ npm run build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:pages": "VITE_BASE_PATH=/officeDisease/ vite preview"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",

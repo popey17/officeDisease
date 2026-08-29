@@ -5,6 +5,7 @@ import {
   type DiseaseStep,
   type SlidePhoto,
 } from '../data/diseases'
+import { HtmlText } from './HtmlText'
 
 export function DiseaseCard({
   disease,
@@ -86,13 +87,23 @@ function StepContent({
           <p className="deck-emoji" aria-hidden="true">
             {disease.emoji}
           </p>
-          <h2 className="deck-title">“{disease.nickname}”</h2>
-          <p className="deck-real">
-            Real name: <strong>{disease.realName}</strong>
-          </p>
-          <p className="deck-condition">{disease.realCondition}</p>
-          <p className="deck-teaser">{disease.diagnosis}</p>
-          <p className="deck-cue">Next: anatomy →</p>
+          <HtmlText
+            className="deck-title"
+            tag="h2"
+            html={`“${disease.nickname}”`}
+          />
+          <HtmlText
+            className="deck-real"
+            tag="p"
+            html={`Real name: ${disease.realName}`}
+          />
+          <HtmlText
+            className="deck-condition"
+            tag="p"
+            html={disease.realCondition}
+          />
+          <HtmlText className="deck-teaser" tag="p" html={disease.diagnosis} />
+          <p className="deck-cue">Next: symptoms →</p>
         </>
       )
     case 'anatomy':
@@ -101,8 +112,8 @@ function StepContent({
           <div className="deck-copy">
             <p className="deck-section">Anatomy</p>
             <h2 className="deck-title">Where it lives</h2>
-            <p className="deck-lead">{disease.anatomyDetail}</p>
-            <p className="deck-summary">{disease.anatomy}</p>
+            <HtmlText className="deck-lead" tag="p" html={disease.anatomyDetail} />
+            <HtmlText className="deck-summary" tag="p" html={disease.anatomy} />
           </div>
           <PhotoStrip photos={disease.anatomyPhotos} />
         </div>
@@ -113,8 +124,8 @@ function StepContent({
           <div className="deck-copy">
             <p className="deck-section">Cause</p>
             <h2 className="deck-title">Why it happens</h2>
-            <p className="deck-lead">{disease.causeDetail}</p>
-            <p className="deck-summary">{disease.cause}</p>
+            <HtmlText className="deck-lead" tag="p" html={disease.causeDetail} />
+            <HtmlText className="deck-summary" tag="p" html={disease.cause} />
           </div>
           <PhotoStrip photos={disease.causePhotos} />
         </div>
@@ -127,7 +138,7 @@ function StepContent({
             <h2 className="deck-title">What people feel</h2>
             <ul className="deck-list">
               {disease.symptomList.map((item) => (
-                <li key={item}>{item}</li>
+                <HtmlText key={item} tag="li" html={item} />
               ))}
             </ul>
           </div>
@@ -142,7 +153,7 @@ function StepContent({
             <h2 className="deck-title">What actually helps</h2>
             <ul className="deck-list">
               {disease.preventionList.map((item) => (
-                <li key={item}>{item}</li>
+                <HtmlText key={item} tag="li" html={item} />
               ))}
             </ul>
           </div>

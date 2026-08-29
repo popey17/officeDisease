@@ -1,4 +1,5 @@
 import { TAKEAWAY } from '../data/diseases'
+import { HtmlText } from './HtmlText'
 
 export function TakeawayCard({ onClose }: { onClose: () => void }) {
   return (
@@ -11,8 +12,8 @@ export function TakeawayCard({ onClose }: { onClose: () => void }) {
       </header>
 
       <div className="takeaway-inner">
-        <h2 className="takeaway-title">{TAKEAWAY.title}</h2>
-        <p className="takeaway-lede">{TAKEAWAY.lede}</p>
+        <HtmlText className="takeaway-title" tag="h2" html={TAKEAWAY.title} />
+        <HtmlText className="takeaway-lede" tag="p" html={TAKEAWAY.lede} />
 
         <ol className="takeaway-list">
           {TAKEAWAY.points.map((point) => (
@@ -25,14 +26,14 @@ export function TakeawayCard({ onClose }: { onClose: () => void }) {
               }
             >
               <span>{point.mark}</span>
-              {point.text}
+              <HtmlText html={point.text} />
             </li>
           ))}
         </ol>
 
         <blockquote className="takeaway-diagnosis">
           <span>Office diagnosis</span>
-          {TAKEAWAY.diagnosis}
+          <HtmlText tag="span" html={TAKEAWAY.diagnosis} />
         </blockquote>
       </div>
     </section>
