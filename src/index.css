@@ -136,7 +136,9 @@ img {
 .rail-num,
 .keys,
 .intro-hint,
-.mast-count {
+.mast-count,
+.preload-kicker,
+.preload-hint {
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.16em;
@@ -834,6 +836,160 @@ kbd {
   padding: 1px 5px;
 }
 
+.preload {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.preload::before {
+  content: '';
+  position: absolute;
+  width: min(72vw, 540px);
+  height: min(72vw, 540px);
+  border: 1px solid rgba(243, 236, 225, 0.06);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: preload-ring 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.preload.is-leaving {
+  animation: preload-out 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  pointer-events: none;
+}
+
+.preload-kicker {
+  position: relative;
+  color: var(--copper);
+  animation: preload-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.preload-title {
+  position: relative;
+  margin: 18px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(52px, 10vw, 118px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  text-align: center;
+}
+
+.preload-title span {
+  display: block;
+  overflow: hidden;
+}
+
+.preload-title em {
+  display: block;
+  font-style: normal;
+  animation: preload-title-in 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.preload-title span:nth-child(2) em {
+  animation-delay: 0.16s;
+}
+
+.preload-rule {
+  width: min(42vw, 280px);
+  height: 1px;
+  margin-top: 28px;
+  background: var(--copper);
+  transform-origin: center;
+  animation: preload-rule 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both;
+}
+
+.preload-hint {
+  position: relative;
+  margin: 22px 0 0;
+  color: rgba(243, 236, 225, 0.38);
+  animation: preload-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.1s both;
+}
+
+.preload-meter {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  bottom: 32px;
+  height: 1px;
+  background: var(--line);
+}
+
+.preload-meter i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--copper);
+  animation: preload-meter 6s linear forwards;
+}
+
+.preload.is-leaving .preload-meter i {
+  animation-play-state: paused;
+}
+
+@keyframes preload-ring {
+  from {
+    transform: scale(0.86);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes preload-rise {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes preload-title-in {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes preload-rule {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes preload-meter {
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes preload-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .hot-label {
   font-family: var(--mono);
   font-size: 11px;
@@ -970,5 +1126,15 @@ kbd {
     left: 18px;
     right: 18px;
     bottom: 28px;
+  }
+
+  .preload-title {
+    font-size: clamp(44px, 16vw, 72px);
+  }
+
+  .preload-meter {
+    left: 18px;
+    right: 18px;
+    bottom: 24px;
   }
 }

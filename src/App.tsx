@@ -1,6 +1,7 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import { DiseaseCard } from './components/DiseaseCard'
 import { DiseaseRail } from './components/DiseaseRail'
+import { Preload } from './components/Preload'
 import { TakeawayCard } from './components/TakeawayCard'
 import {
   DISEASES,
@@ -18,9 +19,11 @@ const Scene = lazy(() =>
 )
 
 export default function App() {
+  const [preloading, setPreloading] = useState(true)
   const [started, setStarted] = useState(false)
   const [view, setView] = useState<View>('overview')
   const [step, setStep] = useState(0)
+  const endPreload = useCallback(() => setPreloading(false), [])
   const disease = isDiseaseView(view) ? diseaseById(view) : undefined
   const presenting = Boolean(disease)
 
@@ -74,6 +77,10 @@ export default function App() {
       const tag = (event.target as HTMLElement | null)?.tagName
       if (tag === 'INPUT' || tag === 'TEXTAREA') return
 
+      if (preloading) {
+        return
+      }
+
       if (!started) {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
@@ -118,7 +125,7 @@ export default function App() {
     <div
       className={[
         'app',
-        started ? 'is-live' : 'is-intro',
+        preloading ? 'is-preloading' : started ? 'is-live' : 'is-intro',
         view === 'takeaway' ? 'is-takeaway' : '',
         presenting ? 'is-presenting' : '',
       ]
@@ -150,6 +157,8 @@ export default function App() {
           )}
         </header>
       )}
+
+      {preloading && <Preload onDone={endPreload} />}
 
       {!started && (
         <div className="intro">
