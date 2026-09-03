@@ -5,36 +5,17 @@ export function TakeawayCard({ onClose }: { onClose: () => void }) {
   return (
     <section className="takeaway">
       <header className="takeaway-bar">
-        <p className="takeaway-kicker">Takeaways · {TAKEAWAY.number} / 09</p>
+        <p className="takeaway-kicker">
+          Closing · {TAKEAWAY.number} / 07
+        </p>
         <button className="takeaway-back" onClick={onClose} type="button">
           Back to the body
         </button>
       </header>
 
       <div className="takeaway-inner">
-        <HtmlText className="takeaway-title" tag="h2" html={TAKEAWAY.title} />
-        <HtmlText className="takeaway-lede" tag="p" html={TAKEAWAY.lede} />
-
-        <ol className="takeaway-list">
-          {TAKEAWAY.points.map((point) => (
-            <li
-              key={point.mark}
-              className={
-                point.mark === 'Trust' || point.mark === 'Doctor'
-                  ? 'is-stern'
-                  : undefined
-              }
-            >
-              <span>{point.mark}</span>
-              <HtmlText html={point.text} />
-            </li>
-          ))}
-        </ol>
-
-        <blockquote className="takeaway-diagnosis">
-          <span>Office diagnosis</span>
-          <HtmlText tag="span" html={TAKEAWAY.diagnosis} />
-        </blockquote>
+        <p className="takeaway-label">Office diagnosis</p>
+        <HtmlText className="takeaway-title" tag="h2" html={TAKEAWAY.quote} />
         <p className="takeaway-credit">{TAKEAWAY.credit}</p>
       </div>
     </section>

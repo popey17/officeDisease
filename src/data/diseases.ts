@@ -6,9 +6,7 @@ export type DiseaseId =
   | 'excel'
   | 'mouse'
   | 'deadline'
-  | 'burnout'
   | 'plague'
-  | 'coffee'
 
 export type HighlightRegion =
   | 'lumbar'
@@ -18,7 +16,6 @@ export type HighlightRegion =
   | 'brain'
   | 'lungs'
   | 'system'
-  | 'cns'
 
 export type SlidePhoto = {
   src: string
@@ -47,9 +44,12 @@ export type Disease = {
   preventionList: string[]
   preventionPhotos: SlidePhoto[]
   diagnosis: string
-  camera: {
-    position: Vec3
-    target: Vec3
+  /** Orbit toward the front (+Z) or back (−Z) of the body, then zoom to the site. */
+  focus: {
+    facing: 'front' | 'back'
+    distance: number
+    /** Extra yaw in radians after facing (e.g. side angle for the wrist). */
+    yaw?: number
   }
   hotspot: Vec3
 }
@@ -58,11 +58,12 @@ function photos(
   id: DiseaseId,
   step: 'anatomy' | 'cause' | 'symptoms' | 'prevention',
   alts: [string, string],
+  formats: [string, string] = ['png', 'png'],
 ): SlidePhoto[] {
   const base = import.meta.env.BASE_URL
   return [
-    { src: `${base}images/${id}/${step}-1.png`, alt: alts[0] },
-    { src: `${base}images/${id}/${step}-2.png`, alt: alts[1] },
+    { src: `${base}images/${id}/${step}-1.${formats[0]}`, alt: alts[0] },
+    { src: `${base}images/${id}/${step}-2.${formats[1]}`, alt: alts[1] },
   ]
 }
 
@@ -118,11 +119,8 @@ export const DISEASES: Disease[] = [
       'An ergonomic chair and desk setup',
     ]),
     diagnosis: "Your chair isn't attacking you. You're just giving it too much responsibility.",
-    camera: {
-      position: [0.55, 1.08, 1.55],
-      target: [0, 1.02, 0],
-    },
-    hotspot: [0.22, 1.02, 0.16],
+    focus: { facing: 'back', distance: 1.28 },
+    hotspot: [0.12, 1.02, -0.18],
   },
   {
     id: 'turtle',
@@ -170,11 +168,8 @@ export const DISEASES: Disease[] = [
       'A short neck-mobility break',
     ]),
     diagnosis: "Your monitor is on the desk. Your head doesn't need to join it.",
-    camera: {
-      position: [0.42, 1.62, 1.22],
-      target: [0, 1.56, 0.02],
-    },
-    hotspot: [0.16, 1.56, 0.14],
+    focus: { facing: 'back', distance: 1.05 },
+    hotspot: [0.08, 1.56, -0.14],
   },
   {
     id: 'excel',
@@ -223,11 +218,8 @@ export const DISEASES: Disease[] = [
       'Comfortable monitor distance',
     ]),
     diagnosis: "If you close your eyes and still see Excel, it's time for a break.",
-    camera: {
-      position: [0.22, 1.74, 0.92],
-      target: [0, 1.71, 0.12],
-    },
-    hotspot: [0.12, 1.72, 0.16],
+    focus: { facing: 'front', distance: 0.72 },
+    hotspot: [0.06, 1.72, 0.16],
   },
   {
     id: 'mouse',
@@ -276,123 +268,80 @@ export const DISEASES: Disease[] = [
       'A short hand stretch break',
     ]),
     diagnosis: 'You spend more time holding your mouse than holding your loved ones.',
-    camera: {
-      position: [0.95, 0.92, 1.2],
-      target: [0.4, 0.78, 0.14],
-    },
+    focus: { facing: 'front', distance: 0.95, yaw: 0.72 },
     hotspot: [0.46, 0.76, 0.2],
   },
   {
     id: 'deadline',
     number: '05',
     emoji: '🧠',
-    nickname: 'Deadline Brain',
-    realName: 'Chronic stress',
-    realCondition: 'Chronic occupational stress',
-    region: 'brain',
+    nickname: 'Deadline Brain / Burnout',
+    realName: 'Chronic stress & burnout',
+    realCondition: 'Chronic occupational stress leading to burnout',
+    region: 'system',
     color: '#8b73c7',
-    anatomy: 'brain + autonomic / endocrine stress systems',
+    anatomy: 'brain + stress systems throughout the body',
     anatomyDetail:
-      'Brain and the autonomic and endocrine stress systems.',
+      'Starts in the brain and autonomic / endocrine stress systems, then spreads into whole-body psychological and physiological strain.',
     anatomyPhotos: photos('deadline', 'anatomy', [
       'The brain under workplace load',
       'Mental load written on the face',
     ]),
     cause: 'workload + low control + no recovery',
     causeDetail:
-      'High workload, lack of control, constant deadlines, and insufficient recovery.',
+      'High workload, lack of control, constant deadlines, and prolonged unmanaged workplace stress without recovery.',
     causePhotos: photos('deadline', 'cause', [
       'Urgent messages stacking up',
       'A desk overloaded with unfinished work',
     ]),
-    symptoms: 'irritability + poor focus + fatigue',
+    symptoms: 'irritability + exhaustion + cynicism + poor focus',
     symptomList: [
       'Irritability',
       'Poor concentration',
       'Headaches',
-      'Fatigue',
+      'Fatigue / exhaustion',
       'Sleep problems',
-    ],
-    symptomPhotos: photos('deadline', 'symptoms', [
-      'Tension headache at the desk',
-      'Cartoon: brain overheating from urgent messages',
-    ]),
-    prevention: 'real breaks + boundaries + sleep',
-    preventionList: [
-      'Take real breaks',
-      'Set boundaries around work',
-      'Prioritize tasks',
-      'Get adequate sleep',
-      'Exercise regularly',
-      'Talk to someone when stress becomes difficult to manage',
-    ],
-    preventionPhotos: photos('deadline', 'prevention', [
-      'A real break outdoors',
-      'Protecting sleep and recovery',
-    ]),
-    diagnosis:
-      "The human brain was not designed to receive 'URGENT' messages 47 times a day.",
-    camera: {
-      position: [0.38, 1.88, 1.08],
-      target: [0, 1.72, 0.02],
-    },
-    hotspot: [0.14, 1.86, 0.08],
-  },
-  {
-    id: 'burnout',
-    number: '06',
-    emoji: '🔥',
-    nickname: 'Battery 1% Syndrome',
-    realName: 'Burnout',
-    realCondition: 'Occupational burnout',
-    region: 'system',
-    color: '#c44b3a',
-    anatomy: 'not one organ — stress systems throughout',
-    anatomyDetail:
-      'Not a single anatomical disease. It involves psychological and physiological stress systems across the whole body.',
-    anatomyPhotos: photos('burnout', 'anatomy', [
-      'Whole-body exhaustion',
-      'Humans do not come with a battery indicator',
-    ]),
-    cause: 'prolonged unmanaged workplace stress',
-    causeDetail: 'Prolonged unmanaged workplace stress.',
-    causePhotos: photos('burnout', 'cause', [
-      'Working late alone under monitor light',
-      'Work that never seems to end',
-    ]),
-    symptoms: 'exhaustion + cynicism + reduced effectiveness',
-    symptomList: [
-      'Exhaustion',
       'Cynicism / detachment',
       'Reduced effectiveness',
     ],
-    symptomPhotos: photos('burnout', 'symptoms', [
-      'Running on empty at the desk',
-      'Cartoon: human battery at 1%',
-    ]),
-    prevention: 'workload + recovery + support',
-    preventionList: [
-      'Manage workload',
-      'Take recovery time',
-      'Maintain boundaries',
-      'Get enough sleep',
-      'Maintain social connections',
-      'Seek professional support when needed',
+    symptomPhotos: [
+      {
+        src: `${import.meta.env.BASE_URL}images/deadline/symptoms-1.png`,
+        alt: 'Tension headache at the desk',
+      },
+      {
+        src: `${import.meta.env.BASE_URL}images/burnout/symptoms-2.png`,
+        alt: 'Cartoon: human battery at 1%',
+      },
     ],
-    preventionPhotos: photos('burnout', 'prevention', [
-      'Social recovery and connection',
-      'Closing the laptop and setting a boundary',
-    ]),
-    diagnosis: "Your laptop has a battery indicator. Unfortunately, humans don't.",
-    camera: {
-      position: [0.15, 1.15, 3.15],
-      target: [0, 1.05, 0],
-    },
-    hotspot: [0.28, 1.28, 0.18],
+    prevention: 'real breaks + boundaries + recovery + support',
+    preventionList: [
+      'Take real breaks',
+      'Set boundaries around work',
+      'Manage workload and prioritize tasks',
+      'Get adequate sleep',
+      'Exercise regularly',
+      'Maintain social connections',
+      'Seek professional support when stress becomes difficult to manage',
+    ],
+    preventionPhotos: [
+      {
+        src: `${import.meta.env.BASE_URL}images/deadline/prevention-2.gif`,
+        alt: 'Protecting sleep and recovery',
+      },
+      {
+        src: `${import.meta.env.BASE_URL}images/deadline/prevention-1.png`,
+        alt: 'A real break outdoors',
+      },
+    ],
+    diagnosis:
+      "The human brain was not designed to receive 'URGENT' messages 47 times a day — and humans don't come with a battery indicator.",
+    focus: { facing: 'front', distance: 2.45 },
+    hotspot: [0.12, 1.22, 0.16],
   },
   {
     id: 'plague',
-    number: '07',
+    number: '06',
     emoji: '🦠',
     nickname: 'Office Plague',
     realName: 'Respiratory infection',
@@ -439,63 +388,8 @@ export const DISEASES: Disease[] = [
     ]),
     diagnosis:
       "One person says, 'Don't worry, it's just a little cough.' Three days later, the entire department is coughing.",
-    camera: {
-      position: [0.58, 1.36, 1.42],
-      target: [0, 1.32, 0],
-    },
-    hotspot: [-0.2, 1.34, 0.16],
-  },
-  {
-    id: 'coffee',
-    number: '08',
-    emoji: '☕',
-    nickname: 'Coffee Dependency',
-    realName: 'Caffeine dependence',
-    realCondition: 'Caffeine dependence / tolerance',
-    region: 'cns',
-    color: '#b8895a',
-    anatomy: 'central nervous system + adenosine signaling',
-    anatomyDetail:
-      'Central nervous system, especially adenosine signaling in the brain.',
-    anatomyPhotos: photos('coffee', 'anatomy', [
-      'The nervous system under caffeine',
-      'Coffee as a daily office companion',
-    ]),
-    cause: 'regular high caffeine intake',
-    causeDetail: 'Regular high caffeine intake.',
-    causePhotos: photos('coffee', 'cause', [
-      'Cup after cup on the desk',
-      'The office coffee machine habit',
-    ]),
-    symptoms: 'headache + fatigue + irritability without it',
-    symptomList: [
-      'Headache without caffeine',
-      'Fatigue',
-      'Irritability',
-      'Difficulty concentrating',
-    ],
-    symptomPhotos: photos('coffee', 'symptoms', [
-      'Reaching for coffee to function',
-      'Cartoon: turning into a coffee cup without caffeine',
-    ]),
-    prevention: 'moderate intake + sleep, not coffee',
-    preventionList: [
-      'Keep caffeine intake moderate',
-      'Avoid relying on caffeine to compensate for chronic sleep deprivation',
-      'Avoid excessive caffeine late in the day',
-      "Reduce gradually if you're consuming a lot",
-    ],
-    preventionPhotos: photos('coffee', 'prevention', [
-      'Moderation with water and alternatives',
-      'Sleep instead of late caffeine',
-    ]),
-    diagnosis:
-      "Coffee doesn't give you energy. Sometimes it just temporarily negotiates with your tiredness.",
-    camera: {
-      position: [-0.48, 1.78, 1.12],
-      target: [0, 1.7, 0],
-    },
-    hotspot: [-0.16, 1.78, 0.12],
+    focus: { facing: 'front', distance: 1.15 },
+    hotspot: [0.08, 1.34, 0.16],
   },
 ]
 
@@ -532,33 +426,8 @@ export const TAKEAWAY_CAMERA = {
 }
 
 export const TAKEAWAY = {
-  number: '09',
-  title: 'Discharge notes',
-  lede: 'What to take away — besides a sudden urge to stand up.',
-  points: [
-    {
-      mark: 'Move',
-      text: 'The office is excellent at keeping you still. Your spine, neck, eyes, and wrists are not.',
-    },
-    {
-      mark: 'Names',
-      text: 'Chair Disease and Turtle Neck are for this session. If it actually hurts, use the boring medical name.',
-    },
-    {
-      mark: 'Habits',
-      text: 'Stand, blink, unhunch, sleep. Coffee is a beverage, not a personality — or a treatment plan.',
-    },
-    {
-      mark: 'Trust',
-      text: "Don't trust me. I have a projector and a 3D mannequin. That is not a medical license.",
-    },
-    {
-      mark: 'Doctor',
-      text: 'If symptoms appear, persist, or worry you — consult a doctor. Not this slide. Not Slack. A doctor.',
-    },
-  ],
-  diagnosis:
-    'This presentation is entertainment with a spine. I am not a doctor. This mannequin is not a doctor. Your chair is definitely not a doctor.',
+  number: '07',
+  quote: 'Stay Healthy<br>Stay Productive<br>Love the Office',
   credit:
     'Anatomical model from Z-Anatomy (CC BY-SA 4.0), packed for the browser by hpfrei.',
 }

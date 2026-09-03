@@ -134,8 +134,8 @@ function StepContent({
       return (
         <div className="deck-split">
           <div className="deck-copy">
-            <p className="deck-section">Symptoms</p>
-            <h2 className="deck-title">What people feel</h2>
+            <p className="deck-section">what people feel</p>
+            <h2 className="deck-title">Symptoms</h2>
             <ul className="deck-list">
               {disease.symptomList.map((item) => (
                 <HtmlText key={item} tag="li" html={item} />

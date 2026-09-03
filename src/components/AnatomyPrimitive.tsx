@@ -159,7 +159,7 @@ export function AnatomyPrimitive({
   const cervical = region === 'cervical'
   const eyes = region === 'eyes'
   const wrist = region === 'wrist'
-  const brain = region === 'brain' || region === 'cns'
+  const brain = region === 'brain'
   const lungs = region === 'lungs'
   const system = region === 'system'
 
@@ -336,7 +336,7 @@ export function AnatomyPrimitive({
       <mesh position={[0, 1.73, 0.02]} visible={brain}>
         <icosahedronGeometry args={[0.078, 1]} />
         <meshPhysicalMaterial
-          color={region === 'cns' ? '#b8895a' : '#9b86c9'}
+          color="#9b86c9"
           emissive={color}
           emissiveIntensity={0.75}
           roughness={0.4}

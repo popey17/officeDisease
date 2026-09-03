@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 
-const DURATION_MS = 6000
 const FADE_MS = 700
 
 type PreloadProps = {
@@ -13,11 +12,6 @@ export function Preload({ onDone }: PreloadProps) {
   const dismiss = () => {
     setLeaving(true)
   }
-
-  useEffect(() => {
-    const timer = window.setTimeout(dismiss, DURATION_MS)
-    return () => window.clearTimeout(timer)
-  }, [])
 
   useEffect(() => {
     if (!leaving) return
@@ -39,8 +33,9 @@ export function Preload({ onDone }: PreloadProps) {
   return (
     <div
       className={leaving ? 'preload is-leaving' : 'preload'}
-      onClick={dismiss}
-      role="presentation"
+      role="dialog"
+      aria-label="Office Diseases"
+      aria-modal="true"
     >
       <p className="preload-kicker">Sharing session</p>
       <h1 className="preload-title">
@@ -52,7 +47,10 @@ export function Preload({ onDone }: PreloadProps) {
         </span>
       </h1>
       <div className="preload-rule" aria-hidden="true" />
-      {/* <p className="preload-hint">Click to skip · six seconds</p> */}
+      <button className="preload-go" type="button" onClick={dismiss}>
+        Start
+      </button>
+      <p className="preload-hint">Enter or Space</p>
       <div className="preload-meter" aria-hidden="true">
         <i />
       </div>

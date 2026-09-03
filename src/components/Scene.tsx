@@ -71,35 +71,52 @@ function Rig({
 }) {
   const controls = useRef<CameraControls>(null)
   const disease = diseaseById(selectedId)
-  const base = takeaway
-    ? TAKEAWAY_CAMERA
-    : (disease?.camera ?? OVERVIEW_CAMERA)
-
-  // In the 1/3 panel, pull the camera back a little so the figure still reads.
-  const cam = presenting
-    ? {
-        position: [
-          base.position[0] * 1.18,
-          base.position[1],
-          base.position[2] * 1.22,
-        ] as [number, number, number],
-        target: base.target,
-      }
-    : base
 
   useEffect(() => {
     const c = controls.current
     if (!c) return
-    void c.setLookAt(
-      cam.position[0],
-      cam.position[1],
-      cam.position[2],
-      cam.target[0],
-      cam.target[1],
-      cam.target[2],
-      true,
-    )
-  }, [cam])
+
+    if (takeaway) {
+      const cam = TAKEAWAY_CAMERA
+      void c.setLookAt(
+        cam.position[0],
+        cam.position[1],
+        cam.position[2],
+        cam.target[0],
+        cam.target[1],
+        cam.target[2],
+        true,
+      )
+      return
+    }
+
+    if (!disease) {
+      const cam = OVERVIEW_CAMERA
+      void c.setLookAt(
+        cam.position[0],
+        cam.position[1],
+        cam.position[2],
+        cam.target[0],
+        cam.target[1],
+        cam.target[2],
+        true,
+      )
+      return
+    }
+
+    const [hx, hy, hz] = disease.hotspot
+    // Model is rotated 180° on Y, so front faces −Z in world space.
+    const facingAzimuth = disease.focus.facing === 'front' ? Math.PI : 0
+    const azimuth = facingAzimuth + (disease.focus.yaw ?? 0)
+    const polar = Math.PI / 2 - 0.16
+    const distance = presenting
+      ? disease.focus.distance * 1.32
+      : disease.focus.distance
+
+    void c.setTarget(hx * 0.55, hy, hz * 0.35, true)
+    void c.rotateTo(azimuth, polar, true)
+    void c.dollyTo(distance, true)
+  }, [disease, takeaway, presenting])
 
   return (
     <CameraControls

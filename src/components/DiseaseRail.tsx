@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { DISEASES, type DiseaseId, type View } from '../data/diseases'
+import { DISEASES, TAKEAWAY, type DiseaseId, type View } from '../data/diseases'
 
 export function DiseaseRail({
   view,
@@ -55,8 +55,8 @@ export function DiseaseRail({
         className={`rail-item ${view === 'takeaway' ? 'is-active' : ''}`}
         onClick={onTakeaway}
       >
-        <span className="rail-num">09</span>
-        <span className="rail-name">Takeaways</span>
+        <span className="rail-num">{TAKEAWAY.number}</span>
+        <span className="rail-name">Closing</span>
       </button>
     </nav>
   )

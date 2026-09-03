@@ -20,7 +20,6 @@ const Scene = lazy(() =>
 
 export default function App() {
   const [preloading, setPreloading] = useState(true)
-  const [started, setStarted] = useState(false)
   const [view, setView] = useState<View>('overview')
   const [step, setStep] = useState(0)
   const endPreload = useCallback(() => setPreloading(false), [])
@@ -81,14 +80,6 @@ export default function App() {
         return
       }
 
-      if (!started) {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault()
-          setStarted(true)
-        }
-        return
-      }
-
       if (event.key === 'Escape' || event.key === '0') {
         goOverview()
         return
@@ -125,7 +116,7 @@ export default function App() {
     <div
       className={[
         'app',
-        preloading ? 'is-preloading' : started ? 'is-live' : 'is-intro',
+        preloading ? 'is-preloading' : 'is-live',
         view === 'takeaway' ? 'is-takeaway' : '',
         presenting ? 'is-presenting' : '',
       ]
@@ -136,7 +127,7 @@ export default function App() {
         <Suspense fallback={<div className="stage-loading" aria-hidden="true" />}>
           <Scene
             selectedId={isDiseaseView(view) ? view : null}
-            exploring={started && view !== 'takeaway'}
+            exploring={view !== 'takeaway'}
             takeaway={false}
             presenting={presenting}
             onSelect={(id) => goDisease(id, 0)}
@@ -147,42 +138,32 @@ export default function App() {
       {view !== 'takeaway' && (
         <header className="mast">
           <p className="mast-kicker">Sharing session</p>
-          <h1 className="mast-title">The Anatomy of Office Life</h1>
-          {started && (
-            <p className="mast-count">
-              {disease
-                ? `${disease.number} / 08 · slide ${step + 1}/5`
-                : 'Select a site'}
-            </p>
-          )}
+          <h1 className="mast-title">The Anatomy of An Office Worker</h1>
+          <p className="mast-count">
+            {disease
+              ? `${disease.number} / 06 · slide ${step + 1}/5`
+              : 'Select a site'}
+          </p>
         </header>
       )}
 
       {preloading && <Preload onDone={endPreload} />}
 
-      {!started && (
+      {view === 'overview' && (
         <div className="intro">
           <p className="intro-kicker">Occupational anatomy</p>
           <h2 className="intro-title">
-            Eight conditions your desk has been quietly collecting
+            Conditions your desk has been quietly collecting
           </h2>
           <p className="intro-lede">
             A guided tour of the modern workplace, mapped onto a body that
             never asked to sit from 9 to 6. Click a site — or use keys 1 to 8.
             Please remain seated. That is, unfortunately, part of the problem.
           </p>
-          <button
-            className="intro-go"
-            type="button"
-            onClick={() => setStarted(true)}
-          >
-            Begin examination
-          </button>
-          <p className="intro-hint">Enter or Space · I am not a doctor</p>
         </div>
       )}
 
-      {started && disease && (
+      {disease && (
         <DiseaseCard
           disease={disease}
           step={step}
@@ -191,18 +172,11 @@ export default function App() {
         />
       )}
 
-      {started && view === 'takeaway' && (
+      {view === 'takeaway' && (
         <TakeawayCard onClose={goOverview} />
       )}
 
-      {started && view === 'overview' && (
-        <p className="stage-hint">
-          Click a marker on the figure, or choose a condition below.
-          Each disease has five slides. Arrow keys walk the room through them.
-        </p>
-      )}
-
-      {started && view !== 'takeaway' && (
+      {view !== 'takeaway' && (
         <DiseaseRail
           view={view}
           onSelect={(id) => goDisease(id, 0)}
@@ -211,10 +185,10 @@ export default function App() {
         />
       )}
 
-      {started && view !== 'takeaway' && (
+      {view !== 'takeaway' && (
         <p className="keys">
           <kbd>→</kbd> next slide · <kbd>←</kbd> back · <kbd>1</kbd>–
-          <kbd>8</kbd> disease · <kbd>9</kbd> takeaways · <kbd>Esc</kbd> full
+          <kbd>8</kbd> disease · <kbd>9</kbd> closing · <kbd>Esc</kbd> full
           body
         </p>
       )}

@@ -10,7 +10,6 @@ const REGION_TO_DISEASE: Record<Exclude<HighlightRegion, 'system'>, DiseaseId> =
   wrist: 'mouse',
   brain: 'deadline',
   lungs: 'plague',
-  cns: 'coffee',
 }
 
 const CLICK_ORDER: Array<Exclude<HighlightRegion, 'system'>> = [
@@ -20,7 +19,6 @@ const CLICK_ORDER: Array<Exclude<HighlightRegion, 'system'>> = [
   'cervical',
   'lungs',
   'brain',
-  'cns',
 ]
 
 type Rule = {
@@ -104,22 +102,6 @@ const RULES: Record<Exclude<HighlightRegion, 'system'>, Rule> = {
       'thoracic vertebra',
     ],
     exclude: ['cervical', 'lumbar', 'false rib cartilage of neck'],
-  },
-  cns: {
-    include: [
-      'cranium',
-      'cranial',
-      'frontal bone',
-      'parietal',
-      'occipital',
-      'temporal bone',
-      'sphenoid',
-      'skull',
-      'vertebra',
-      'vertebral',
-      'sacrum',
-      'coccyx',
-    ],
   },
 }
 
