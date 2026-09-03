@@ -5,8 +5,8 @@ export type DiseaseId =
   | 'turtle'
   | 'excel'
   | 'mouse'
-  | 'deadline'
   | 'plague'
+  | 'deadline'
 
 export type HighlightRegion =
   | 'lumbar'
@@ -272,8 +272,60 @@ export const DISEASES: Disease[] = [
     hotspot: [0.46, 0.76, 0.2],
   },
   {
-    id: 'deadline',
+    id: 'plague',
     number: '05',
+    emoji: '🦠',
+    nickname: 'Office Plague',
+    realName: 'Respiratory infection',
+    realCondition: 'Common cold, influenza, COVID-19 and other respiratory infections',
+    region: 'lungs',
+    color: '#5aaa72',
+    anatomy: 'nose + throat + airways + lungs',
+    anatomyDetail:
+      'Respiratory tract — nose, throat, airways, and lungs, depending on the infection.',
+    anatomyPhotos: photos('plague', 'anatomy', [
+      'Chest and breathing',
+      'Fresh air for the respiratory tract',
+    ]),
+    cause: 'viruses + close contact + shared surfaces',
+    causeDetail:
+      'Viruses spread through respiratory particles, close contact, and contaminated hands and surfaces.',
+    causePhotos: photos('plague', 'cause', [
+      'Close quarters in an open office',
+      'Shared desks and surfaces',
+    ]),
+    symptoms: 'cough + sore throat + fever + fatigue',
+    symptomList: [
+      'Cough',
+      'Sore throat',
+      'Congestion',
+      'Fever',
+      'Fatigue',
+    ],
+    symptomPhotos: photos('plague', 'symptoms', [
+      'Feeling under the weather at work',
+      'Cartoon: office plague spreading',
+    ]),
+    prevention: 'stay home + ventilation + hands',
+    preventionList: [
+      'Stay home when genuinely sick when possible',
+      'Improve ventilation',
+      'Wash hands',
+      'Cover coughs and sneezes',
+      'Consider vaccination where appropriate',
+    ],
+    preventionPhotos: photos('plague', 'prevention', [
+      'Hand washing',
+      'Fresh air and better ventilation',
+    ]),
+    diagnosis:
+      "One person says, 'Don't worry, it's just a little cough.' Three days later, the entire department is coughing.",
+    focus: { facing: 'front', distance: 1.15 },
+    hotspot: [0.08, 1.34, 0.16],
+  },
+  {
+    id: 'deadline',
+    number: '06',
     emoji: '🧠',
     nickname: 'Deadline Brain / Burnout',
     realName: 'Chronic stress & burnout',
@@ -338,58 +390,6 @@ export const DISEASES: Disease[] = [
       "The human brain was not designed to receive 'URGENT' messages 47 times a day — and humans don't come with a battery indicator.",
     focus: { facing: 'front', distance: 2.45 },
     hotspot: [0.12, 1.22, 0.16],
-  },
-  {
-    id: 'plague',
-    number: '06',
-    emoji: '🦠',
-    nickname: 'Office Plague',
-    realName: 'Respiratory infection',
-    realCondition: 'Common cold, influenza, COVID-19 and other respiratory infections',
-    region: 'lungs',
-    color: '#5aaa72',
-    anatomy: 'nose + throat + airways + lungs',
-    anatomyDetail:
-      'Respiratory tract — nose, throat, airways, and lungs, depending on the infection.',
-    anatomyPhotos: photos('plague', 'anatomy', [
-      'Chest and breathing',
-      'Fresh air for the respiratory tract',
-    ]),
-    cause: 'viruses + close contact + shared surfaces',
-    causeDetail:
-      'Viruses spread through respiratory particles, close contact, and contaminated hands and surfaces.',
-    causePhotos: photos('plague', 'cause', [
-      'Close quarters in an open office',
-      'Shared desks and surfaces',
-    ]),
-    symptoms: 'cough + sore throat + fever + fatigue',
-    symptomList: [
-      'Cough',
-      'Sore throat',
-      'Congestion',
-      'Fever',
-      'Fatigue',
-    ],
-    symptomPhotos: photos('plague', 'symptoms', [
-      'Feeling under the weather at work',
-      'Cartoon: office plague spreading',
-    ]),
-    prevention: 'stay home + ventilation + hands',
-    preventionList: [
-      'Stay home when genuinely sick when possible',
-      'Improve ventilation',
-      'Wash hands',
-      'Cover coughs and sneezes',
-      'Consider vaccination where appropriate',
-    ],
-    preventionPhotos: photos('plague', 'prevention', [
-      'Hand washing',
-      'Fresh air and better ventilation',
-    ]),
-    diagnosis:
-      "One person says, 'Don't worry, it's just a little cough.' Three days later, the entire department is coughing.",
-    focus: { facing: 'front', distance: 1.15 },
-    hotspot: [0.08, 1.34, 0.16],
   },
 ]
 
