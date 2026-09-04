@@ -90,12 +90,12 @@ function StepContent({
           <HtmlText
             className="deck-title"
             tag="h2"
-            html={`“${disease.nickname}”`}
+            html={disease.realName}
           />
           <HtmlText
             className="deck-real"
             tag="p"
-            html={`Real name: ${disease.realName}`}
+            html={`Also known as: “${disease.nickname}”`}
           />
           <HtmlText
             className="deck-condition"
