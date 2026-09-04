@@ -103,7 +103,7 @@ function StepContent({
             html={disease.realCondition}
           />
           <HtmlText className="deck-teaser" tag="p" html={disease.diagnosis} />
-          <p className="deck-cue">Next: symptoms →</p>
+          <p className="deck-cue">Next: anatomy →</p>
         </>
       )
     case 'anatomy':

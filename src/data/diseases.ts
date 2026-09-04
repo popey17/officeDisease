@@ -404,8 +404,8 @@ export type DiseaseStep =
 
 export const DISEASE_STEPS: DiseaseStep[] = [
   'intro',
-  'symptoms',
   'anatomy',
+  'symptoms',
   'cause',
   'prevention',
 ]
